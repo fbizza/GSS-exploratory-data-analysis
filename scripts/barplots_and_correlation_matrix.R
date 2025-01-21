@@ -1,6 +1,6 @@
 library(ggplot2)
 library(corrplot)
-library(reshape2)  # For reshaping the correlation matrix
+library(reshape2)
 
 question_descriptions <- list(
   CAPPUN = "Favor or oppose death penalty for murder? (1: Favor, 2: Oppose)",
@@ -61,10 +61,9 @@ for (col_name in colnames(GSS_clean)) {
   print(plot)
 }
 
-# Correlation matrix calculation
+# Correlation matrix
 cor_matrix <- cor(GSS_clean, method = "pearson")
 
-# Save the correlation matrix plot using corrplot
 png("results/correlation_matrix_plot.png", width = 1000, height = 800)
 corrplot(cor_matrix, 
          method = "color", 
@@ -78,7 +77,6 @@ corrplot(cor_matrix,
          mar = c(0, 0, 3, 0))  
 dev.off()
 
-# Create and save a heatmap of the correlation matrix using ggplot2
 cor_long <- melt(cor_matrix)
 colnames(cor_long) <- c("Variable1", "Variable2", "Correlation")
 
