@@ -11,7 +11,9 @@ question_descriptions <- list(
   SATJOB = "How satisfied are you with your job? (1: Very satisfied, 2: Moderately satisfied, 3: Dissatisfied)"
 )
 
-GSS_clean <- na.omit(GSS)
+load("data/GSS_raw.RData")
+GSS_clean <- na.omit(GSS_clean)
+save(GSS_clean, file = "data/GSS_clean.RData")
 
 legends <- list(
   CAPPUN = c("1" = "Favor", "2" = "Oppose"),
@@ -62,24 +64,6 @@ for (col_name in colnames(GSS_clean)) {
 }
 
 # Correlation matrix
-cor_matrix <- cor(GSS_clean, method = "pearson")
-
-png("results/correlation_matrix_plot.png", width = 1000, height = 800)
-corrplot(cor_matrix, 
-         method = "color", 
-         type = "upper", 
-         col = colorRampPalette(c("blue", "white", "red"))(200), 
-         tl.cex = 0.8, tl.col = "black", 
-         number.cex = 0.7, 
-         addCoef.col = "black", cl.cex = 0.8, 
-         title = "Correlation Matrix", 
-         font.main = 1, font.lab = 1, font.axis = 1, 
-         mar = c(0, 0, 3, 0))  
-dev.off()
-
-cor_long <- melt(cor_matrix)
-colnames(cor_long) <- c("Variable1", "Variable2", "Correlation")
-
 heatmap <- ggplot(cor_long, aes(x = Variable1, y = Variable2, fill = Correlation)) +
   geom_tile() +
   geom_text(aes(label = round(Correlation, 2)), size = 3) +  # Display correlation values rounded to 2 decimals
