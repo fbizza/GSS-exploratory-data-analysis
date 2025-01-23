@@ -12,8 +12,21 @@ question_descriptions <- list(
 )
 
 load("data/GSS_raw.RData")
-GSS_clean <- na.omit(GSS_clean)
-save(GSS_clean, file = "data/GSS_clean.RData")
+
+
+rows_NA <- sum(apply(is.na(GSS), 1, any))
+cat("Numero di righe con valori NA:", rows_NA, "\n")
+
+
+GSS_clean <- na.omit(GSS)
+
+
+cleaned_rows <- nrow(GSS_clean)
+cat("Numero di righe rimanenti dopo la rimozione di NA:", cleaned_rows, "\n")
+
+
+GSS_clean <- na.omit(GSS)
+#save(GSS_clean, file = "data/GSS_clean.RData")
 
 legends <- list(
   CAPPUN = c("1" = "Favor", "2" = "Oppose"),
@@ -32,7 +45,7 @@ consistent_theme <- theme_minimal(base_size = 12) +
     axis.title = element_text(size = 10)
   )
 
-# Create and display bar plots for each variable with question descriptions
+# Bar plots for each variable
 for (col_name in colnames(GSS_clean)) {
   freq_table <- table(GSS_clean[[col_name]], useNA = "ifany")
   percent_table <- round(100 * prop.table(freq_table), 1)
@@ -63,20 +76,3 @@ for (col_name in colnames(GSS_clean)) {
   print(plot)
 }
 
-# Correlation matrix
-heatmap <- ggplot(cor_long, aes(x = Variable1, y = Variable2, fill = Correlation)) +
-  geom_tile() +
-  geom_text(aes(label = round(Correlation, 2)), size = 3) +  # Display correlation values rounded to 2 decimals
-  scale_fill_gradient2(low = "blue", mid = "white", high = "red", midpoint = 0, limits = c(-1, 1)) +
-  theme_minimal() +
-  theme(axis.text.x = element_text(angle = 45, hjust = 1)) +
-  labs(
-    title = "Correlation Matrix Heatmap",
-    x = "Variables",
-    y = "Variables",
-    fill = "Correlation"
-  )
-
-ggsave("results/correlation_matrix_heatmap.png", heatmap, width = 8, height = 6, dpi = 300)
-
-print(heatmap)
