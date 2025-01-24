@@ -7,17 +7,16 @@ GSS_clean$ABRAPE <- factor(GSS_clean$ABRAPE, levels = c(1, 2), labels = c(" Yes"
 GSS_clean$CONFINAN <- factor(GSS_clean$CONFINAN, levels = c(1, 2, 3), labels = c(" A great deal", " Only some", " Hardly any"))
 GSS_clean$SATJOB <- factor(GSS_clean$SATJOB, levels = c(1, 2, 3), labels = c(" Very satisfied", " Moderately satisfied", " Dissatisfied"))
 str(GSS_clean)
-logistic_model <- glm(CAPPUN ~ SEX + GUNLAW + ABRAPE + CONFINAN + SATJOB,
+
+GSS_clean$CAPPUN <- relevel(GSS_clean$CAPPUN, ref=' Oppose')
+GSS_clean$GUNLAW <- relevel(GSS_clean$GUNLAW, ref=' Favor')
+GSS_clean$SEX <- relevel(GSS_clean$SEX, ref=' Male')
+GSS_clean$ABRAPE <- relevel(GSS_clean$ABRAPE, ref=' Yes')
+
+logistic_model <- glm(CAPPUN ~ SEX + GUNLAW + ABRAPE,
                       data = GSS_clean,
                       family = binomial)
 
 summary(logistic_model)
-
-logistic_model <- glm(CAPPUN ~ SEX,
-                      data = GSS_clean,
-                      family = binomial)
-
-summary(logistic_model)
-
 
 

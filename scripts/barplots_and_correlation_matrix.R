@@ -12,21 +12,15 @@ question_descriptions <- list(
 )
 
 load("data/GSS_raw.RData")
-
-
 rows_NA <- sum(apply(is.na(GSS), 1, any))
 cat("Numero di righe con valori NA:", rows_NA, "\n")
-
-
 GSS_clean <- na.omit(GSS)
-
-
 cleaned_rows <- nrow(GSS_clean)
 cat("Numero di righe rimanenti dopo la rimozione di NA:", cleaned_rows, "\n")
 
 
 GSS_clean <- na.omit(GSS)
-#save(GSS_clean, file = "data/GSS_clean.RData")
+
 
 legends <- list(
   CAPPUN = c("1" = "Favor", "2" = "Oppose"),
