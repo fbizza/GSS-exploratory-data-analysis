@@ -15,11 +15,27 @@ GSS_clean$ABRAPE <- relevel(GSS_clean$ABRAPE, ref=' Yes')
 GSS_clean$CONFINAN <- as.numeric(GSS_clean$CONFINAN)
 GSS_clean$SATJOB <- as.numeric(GSS_clean$SATJOB)
 
+# GSS_clean$SATJOB <- factor(GSS_clean$SATJOB, levels = c(1, 2, 3), labels = c(" Very satisfied", " Moderately satisfied", " Dissatisfied"))
+# GSS_clean$SATJOB <- relevel(GSS_clean$SATJOB, ref=' Very satisfied')
+# logistic_model <- glm(CAPPUN ~ SEX + GUNLAW + ABRAPE + SATJOB + CONFINAN,
+#                       data = GSS_clean,
+#                       family = binomial)
+# 
+# summary(logistic_model)
+# logistic_model <- glm(GUNLAW ~ SEX + CAPPUN + ABRAPE + SATJOB + CONFINAN,
+#                       data = GSS_clean,
+#                       family = binomial)
+# 
+# summary(logistic_model)
 GSS_clean$SATJOB <- factor(GSS_clean$SATJOB, levels = c(1, 2, 3), labels = c(" Very satisfied", " Moderately satisfied", " Dissatisfied"))
-GSS_clean$SATJOB <- relevel(GSS_clean$SATJOB, ref=' Moderately satisfied')
-logistic_model <- glm(CAPPUN ~ SEX + GUNLAW + ABRAPE + SATJOB + CONFINAN,
+GSS_clean$SATJOB <- relevel(GSS_clean$SATJOB, ref=' Very satisfied')
+summary(logistic_model)
+logistic_model <- glm(ABRAPE ~ SEX + CAPPUN + GUNLAW + SATJOB + CONFINAN,
                       data = GSS_clean,
                       family = binomial)
 
 summary(logistic_model)
+
+
+
 
