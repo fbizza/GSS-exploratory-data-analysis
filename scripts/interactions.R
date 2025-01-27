@@ -41,7 +41,69 @@ GSS_clean$SATJOB <- as.numeric(GSS_clean$SATJOB)
 # summary(linear_model)
 
 
+# 
+# linear_model <- lm(CONFINAN ~ SEX + CAPPUN + GUNLAW + ABRAPE + SATJOB, data = GSS_clean)
+# 
+# summary(linear_model)
 
-linear_model <- lm(CONFINAN ~ SEX + CAPPUN + GUNLAW + ABRAPE + SATJOB, data = GSS_clean)
+#Backward 
+# fit_all <- glm(GUNLAW ~ SEX + CAPPUN + ABRAPE + SATJOB + CONFINAN,
+#                       data = GSS_clean,
+#                       family = binomial)
 
-summary(linear_model)
+#AIC
+# backward_aic <- step(fit_all, direction="backward", k=2)
+# formula(backward_aic)
+# summary(backward_aic)
+
+#BIC
+# backward_bic <- step(fit_all, direction="backward", k=log(nobs(fit_all)))
+# formula(backward_bic)
+# summary(backward_bic)
+
+#Forward
+# fit_0 <- glm(GUNLAW ~ 1, data = GSS_clean, family="binomial")
+#AIC
+# forward_AIC <- step(fit_0, scope=formula(fit_all), direction="forward", k=2)
+# summary(forward_AIC)
+
+#BIC
+# forward_bic <- step(fit_0, scope=formula(fit_all), direction="forward", k=log(nobs(fit_all)))
+# summary(forward_bic)
+
+#Both
+#AIC
+# both_aic <- step(fit_0, scope=formula(fit_all), direction="both", k=2)
+# summary(both_aic)
+
+#BIC
+# both_bic <- step(fit_0, scope=formula(fit_all), direction="both", k=log(nobs(fit_all)))
+# summary(both_bic)
+
+
+#TEST 
+logistic_model <- glm(GUNLAW ~ SEX + CAPPUN + ABRAPE,
+                      data = GSS_clean,
+                      family = binomial)
+summary(logistic_model)
+
+
+
+
+coeff <- coef(logistic_model)
+
+calc_probability <- function(SEX, CAPPUN, ABRAPE, coeff) {
+  intercept <- coeff["(Intercept)"]
+  sex_effect <- ifelse(SEX == " Female", coeff["SEX Female"], 0)
+  cappun_effect <- ifelse(CAPPUN == " Favor", coeff["CAPPUN Favor"], 0)
+  abrape_effect <- ifelse(ABRAPE == " No", coeff["ABRAPE No"], 0)
+  z <- intercept + sex_effect + cappun_effect + abrape_effect
+  p <- 1 / (1 + exp(-z))
+  return(p)
+}
+
+prob_1 <- calc_probability(SEX = " Female", CAPPUN = " Favor", ABRAPE = " No", coeff)
+prob_2 <- calc_probability(SEX = " Male", CAPPUN = " Oppose", ABRAPE = " Yes", coeff)
+
+cat("Probabilità Individuo 1:", prob_1, "\n")
+cat("Probabilità Individuo 2:", prob_2, "\n")
