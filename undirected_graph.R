@@ -8,7 +8,6 @@ GSS_clean$CONFINAN <- as.numeric(GSS_clean$CONFINAN)
 GSS_clean$SATJOB <- as.numeric(GSS_clean$SATJOB)
 
 
-
 m_saturated <- dmod(~.^., data=GSS_clean)
 plot(m_saturated)
 
@@ -16,6 +15,9 @@ selected_model <- stepwise(m_saturated)
 plot(selected_model)
 
 
-formula(selected_model)
+fitted_model <- bn.fit(bn_model, data = GSS_clean)
 
-
+prob <- cpquery(fitted_model,
+                event = (GUNLAW == " Favor"),
+                evidence = (SEX == " Female"))
+print(prob)
