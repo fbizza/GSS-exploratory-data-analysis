@@ -22,11 +22,11 @@ GSS_clean$SATJOB <- as.numeric(GSS_clean$SATJOB)
 #                       family = binomial)
 # 
 # summary(logistic_model)
-# logistic_model <- glm(GUNLAW ~ SEX + CAPPUN + ABRAPE + SATJOB + CONFINAN,
-#                       data = GSS_clean,
-#                       family = binomial)
-# 
-# summary(logistic_model)
+logistic_model <- glm(GUNLAW ~ SEX + CAPPUN + ABRAPE + SATJOB + CONFINAN,
+                      data = GSS_clean,
+                      family = binomial)
+
+summary(logistic_model)
 # GSS_clean$SATJOB <- factor(GSS_clean$SATJOB, levels = c(1, 2, 3), labels = c(" Very satisfied", " Moderately satisfied", " Dissatisfied"))
 # GSS_clean$SATJOB <- relevel(GSS_clean$SATJOB, ref=' Very satisfied')
 # summary(logistic_model)
@@ -46,15 +46,15 @@ GSS_clean$SATJOB <- as.numeric(GSS_clean$SATJOB)
 # 
 # summary(linear_model)
 
-#Backward
-fit_all <- glm(GUNLAW ~ SEX + CAPPUN + ABRAPE + CONFINAN:SATJOB,
-                      data = GSS_clean,
-                      family = binomial)
+# Backward
+fit_all <- glm(GUNLAW ~ SEX + CAPPUN + ABRAPE + CONFINAN*JOBSAT,
+#                       data = GSS_clean,
+#                       family = binomial)
 
 #AIC
-# backward_aic <- step(fit_all, direction="backward", k=2)
-# formula(backward_aic)
-# summary(backward_aic)
+backward_aic <- step(fit_all, direction="backward", k=2)
+formula(backward_aic)
+summary(backward_aic)
 
 #BIC
 backward_bic <- step(fit_all, direction="backward", k=log(nobs(fit_all)))
@@ -81,7 +81,7 @@ summary(backward_bic)
 # summary(both_bic)
 
 
-# TEST 
+#TEST 
 # logistic_model <- glm(GUNLAW ~ SEX + CAPPUN + ABRAPE,
 #                       data = GSS_clean,
 #                       family = binomial)
@@ -107,3 +107,16 @@ summary(backward_bic)
 # 
 # cat("Probabilità Individuo 1:", prob_1, "\n")
 # cat("Probabilità Individuo 2:", prob_2, "\n")
+
+
+
+
+
+GSS_men <- subset(GSS_clean, SEX == " Male")
+
+# Modello logistico solo per gli uomini
+logistic_model_men <- glm(GUNLAW ~ CAPPUN + ABRAPE + SATJOB + CONFINAN ,
+                          data = GSS_men,
+                          family = binomial)
+
+summary(logistic_model_men)
